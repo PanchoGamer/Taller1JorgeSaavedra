@@ -56,7 +56,7 @@ public class Main {
 						String[] partes = line.split(";");
 
 						if (Usuario.equals(partes[0])) {
-							if (partes[1].equals(partes[1])) {
+							if (Contra.equals(partes[1])) {
 								pass = true;
 							}
 							
@@ -92,11 +92,39 @@ public class Main {
 					}
 
 
+					sArchU.close();
 				} catch (Exception e) {
-					System.out.println("no existe el archivo");
+					System.out.println("no existe el archivo Usuarios.txt");
 				}
 			}
-
+			else if (option == 2){
+				System.out.println("Bienvenido al ");
+				int opcion = 0;
+				try {
+					Scanner sArchR = new Scanner(fileR);
+					
+					do {
+						while (sArchR.hasNextLine()) {
+							String line = sArchR.nextLine();
+							System.out.println(line);
+							
+							}
+						try {
+							String entry = s.nextLine();
+							
+							option = Integer.parseInt(entry);
+							
+						} catch (InputMismatchException e) {
+							System.out.println();
+						}
+						
+					} while (opcion != 5);
+					
+					sArchR.close();
+				} catch (Exception e) {
+					System.out.println("No existe el archivo Registros.txt");
+				}
+			}
 		} while (option != 3);
 
 		s.close();
