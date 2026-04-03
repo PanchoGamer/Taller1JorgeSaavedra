@@ -24,7 +24,7 @@ public class Main {
 		do {
 
 			// Menu :D
-			System.out.println("1) Menu de Usuarios");
+			System.out.println("\n1) Menu de Usuarios");
 			System.out.println("2) Menu de analisis");
 			System.out.println("3) Salir");
 
@@ -38,11 +38,15 @@ public class Main {
 			if (option == 1) {
 
 				// Pregunta usuario y contraseña para luego verificar con el TXT correspondiente
-				System.out.print("Usuario: ");
+				System.out.print("\nUsuario: ");
 				String Usuario = s.nextLine();
 				System.out.print("Contraseña: ");
 				String Contra = s.nextLine();
-
+				
+				boolean pass = false;
+				
+				int opcion = 0;
+				
 				try {
 					// Scanner para el usuario
 					Scanner sArchU = new Scanner(fileU);
@@ -51,37 +55,42 @@ public class Main {
 						String line = sArchU.nextLine();
 						String[] partes = line.split(";");
 
-						int opcion = 0;
-						System.out.println(partes[0]);
-						System.out.println(partes[1]);
-
-						if (Usuario == partes[0] && Contra == partes[1]) {
-							do {
-
-								try {
-									System.out.printf("Bienvenido %s \n", Usuario);
-									System.out.println("Que deseas realizar? \n");
-									System.out.println("1) Registrar actividad");
-									System.out.println("2) Modificar actividad");
-									System.out.println("3) Eliminar actividad");
-									System.out.println("4) Cambiar contraseña");
-									System.out.println("5) Salir");
-
-									String entry = s.nextLine();
-
-									opcion = Integer.parseInt(entry);
-
-								} catch (InputMismatchException e) {
-									System.out.println("Formato incorrecto, vuelva a ingresar");
-								}
-
-							} while (opcion != 5);
-
-						} else {
-							System.out.println("Datos Incorrectos");
+						if (Usuario.equals(partes[0])) {
+							if (partes[1].equals(partes[1])) {
+								pass = true;
+							}
+							
 						}
 
 					}
+					if (pass) {
+						do {
+							
+							try {
+								System.out.println("\nAcceso Correcto!");
+								System.out.printf("\nBienvenido %s\n", Usuario);
+								System.out.println("\nQue deseas realizar? \n");
+								System.out.println("1) Registrar actividad");
+								System.out.println("2) Modificar actividad");
+								System.out.println("3) Eliminar actividad");
+								System.out.println("4) Cambiar contraseña");
+								System.out.println("5) Salir");
+								System.out.print(">");
+								
+								String entry = s.nextLine();
+								
+								opcion = Integer.parseInt(entry);
+								
+							} catch (InputMismatchException e) {
+								System.out.println("Formato incorrecto, vuelva a ingresar");
+							}
+							
+						} while (opcion != 5);
+						
+					} else {
+						System.out.println("Datos Incorrectos");
+					}
+
 
 				} catch (Exception e) {
 					System.out.println("no existe el archivo");
