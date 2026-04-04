@@ -23,7 +23,6 @@ public class Main {
 		// Scanner sArchR = new Scanner(fileR);
 
 		int option = 0;
-		int w = 0;
 		do {
 
 			// Menu :D
@@ -96,23 +95,34 @@ public class Main {
 							
 							if (opcion == 1) {
 								try {
-									FileWriter fw = new FileWriter(fileR, true);
-									BufferedWriter bw = new BufferedWriter(fw);
-									
-									System.out.print("Ingrese fecha (DD/MM/AAAA): ");
-									String fecha = s.nextLine();
-									System.out.print("\nIngrese horas:");
-									String horas = s.nextLine();
-									System.out.print("\nIngrese actividad: ");
-									String actividad = s.nextLine();
-									
-									String ladd = (Usuario + ";" + fecha + ";" + horas + ";" + actividad);
-
-									bw.newLine();
-									bw.write(ladd);
-									
-									bw.close();
-									
+									Scanner sArchR = new Scanner(fileR);
+									int totalRegistro = 0;
+									while(sArchR.hasNextLine()) {
+										sArchR.nextLine();
+										totalRegistro++;
+									}
+									if (totalRegistro < 300) {
+										FileWriter fw = new FileWriter(fileR, true);
+										BufferedWriter bw = new BufferedWriter(fw);
+										
+										System.out.print("Ingrese fecha (DD/MM/AAAA): ");
+										String fecha = s.nextLine();
+										System.out.print("\nIngrese horas:");
+										String horas = s.nextLine();
+										System.out.print("\nIngrese actividad: ");
+										String actividad = s.nextLine();
+										
+										String ladd = (Usuario + ";" + fecha + ";" + horas + ";" + actividad);
+										
+										bw.newLine();
+										bw.write(ladd);
+										
+										bw.close();
+										sArchR.close();
+									} else {
+										System.out.println("Error, no se puede tener mas de 300 actividades");
+									}
+								
 									
 								} catch (IOException e) {
 									System.out.println("Error con Registros.txt");
@@ -120,6 +130,88 @@ public class Main {
 								
 								
 							}
+							
+							if (opcion == 2) {
+								int contTexto = 0;
+								int cont = 1;
+								int nlinea = 0;
+								String [] lineas = new String[300];
+								int[] nlineas = new int[300];
+								int[] nlineasR = new int[300];
+								System.out.println("\nIndique linea a modificar\n");
+								boolean est = true;
+								while (est) {
+									try {
+										Scanner sArchR = new Scanner(fileR);
+										while (sArchR.hasNextLine()){
+											String line = sArchR.nextLine();
+											String[] partes = line.split(";");
+											
+											lineas[contTexto] = line;
+											
+											nlineas[cont] = cont;
+											
+											if (Usuario.equals(partes[0])) {
+												System.out.println(cont+")"+" "+line);
+												nlineasR[cont] = contTexto; 
+												cont++;
+												
+											}
+											contTexto++;
+										}
+										
+										sArchR.close();
+									} catch (Exception e) {
+										System.out.println("No existe el archivo Registros.txt");
+									}
+									
+									System.out.print("\n> ");
+									
+									try {
+										String ent = s.nextLine();
+										nlinea = Integer.parseInt(ent);
+										
+										
+										
+										
+									} catch (Exception e) {
+										System.out.println("Ingrese un numero valido de linea");
+									}
+									if (nlinea > cont) {
+										System.out.println("Error seleccione una linea valida");
+									} else {
+										System.out.print("Indique fecha (DD/MM/AAAA): ");
+										String fecha = s.nextLine();
+										
+										System.out.print("Indique horas: ");
+										String horas = s.nextLine();
+										
+										System.out.print("Indique actividad: ");
+										String activ = s.nextLine();
+										
+										String lineam = (Usuario + ";" + fecha + ";" + horas + ";" + activ);
+										
+										int indiceR = nlineasR[nlinea];
+										lineas[indiceR] = lineam;
+										
+										BufferedWriter bw = new BufferedWriter(new FileWriter(fileR));
+										
+										for (int i = 0; i < contTexto; i++) {
+											bw.write(lineas[i]);
+											if (i < contTexto -1) {
+												bw.newLine();
+											}
+										}
+										
+										bw.close();
+										
+										est = false;
+										
+									}
+									
+								}
+							}
+						
 							
 						} while (opcion != 5);
 						
