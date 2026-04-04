@@ -5,8 +5,8 @@
 package Logica;
 
 // Importamos librerias necesarias
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
 
@@ -101,6 +101,7 @@ public class Main {
 										sArchR.nextLine();
 										totalRegistro++;
 									}
+									sArchR.close();
 									if (totalRegistro < 300) {
 										FileWriter fw = new FileWriter(fileR, true);
 										BufferedWriter bw = new BufferedWriter(fw);
@@ -122,7 +123,7 @@ public class Main {
 									} else {
 										System.out.println("Error, no se puede tener mas de 300 actividades");
 									}
-								
+									sArchR.close();
 									
 								} catch (IOException e) {
 									System.out.println("Error con Registros.txt");
@@ -131,7 +132,7 @@ public class Main {
 								
 							}
 							
-							if (opcion == 2) {
+							else if (opcion == 2) {
 								int contTexto = 0;
 								int cont = 1;
 								int nlinea = 0;
@@ -177,7 +178,7 @@ public class Main {
 									} catch (Exception e) {
 										System.out.println("Ingrese un numero valido de linea");
 									}
-									if (nlinea > cont) {
+									if (nlinea > cont || nlinea < 1) {
 										System.out.println("Error seleccione una linea valida");
 									} else {
 										System.out.print("Indique fecha (DD/MM/AAAA): ");
@@ -211,7 +212,98 @@ public class Main {
 									
 								}
 							}
-						
+							else if (opcion == 3) {
+								boolean est = true;
+								System.out.println("Seleccione linea a eliminar ");
+								int opc = 0;
+								int cont = 0;
+								int cMuestra = 1;
+								String[] lineas = new String[300];
+								int[] nlineas = new int[300];
+								int[] nlineasR = new int[300];
+								while (est) {
+									Scanner sArchR = new Scanner(fileR);
+									while (sArchR.hasNextLine()) {
+										String linea = sArchR.nextLine();
+										String[] partes = linea.split(";");
+										lineas[cont] = linea;
+										nlineas[cont] = cont;
+										
+										if (Usuario.equals(partes[0])) {
+											System.out.println(cMuestra+")"+" "+linea);
+											nlineasR[cMuestra] = cont;
+											cMuestra++;
+										}
+										cont++;
+										
+									}
+	
+									System.out.print(">");
+									String entr = s.nextLine();
+									
+									try {
+										opc = Integer.parseInt(entr);
+										
+										int indiceR = nlineasR[opc];
+										
+										
+										if (opc > 300 || opc < 1) {
+											System.out.println("Error, elija entre las activides");
+										} else {
+											BufferedWriter bw = new BufferedWriter(new FileWriter(fileR));
+											for (int i =0; i < cont; i++) {
+												if (i != indiceR) {
+													bw.write(lineas[i]);
+													bw.newLine();
+												}
+											}
+											bw.close();
+										}
+									} catch (Exception e) {
+										System.out.println("Error ingrese un numero valido");
+									}
+									
+									sArchR.close();
+									est = false;
+								}
+							}
+							else if (opcion == 4) {
+								String[] Usuarios = new String[10];
+								String[] Contrase = new String[10];
+								System.out.print("Ingrese nueva contraseña: ");
+								String ncontra = s.nextLine();
+								int cont = 0;
+								try {
+									Scanner sArchU2 = new Scanner(fileU);
+									
+									while (sArchU2.hasNextLine()) {
+										String linea = sArchU2.nextLine();
+										String[] partes = linea.split(";");
+										Usuarios[cont] = partes[0];
+										if (partes[0].equals(Usuario)) {
+											Contrase[cont] = ncontra;
+										} else {
+											Contrase[cont] = partes[1];
+										}
+										cont++;
+									}
+									sArchU2.close();
+									BufferedWriter bw = new BufferedWriter(new FileWriter(fileU));
+									for(int i = 0; i < cont; i++) {
+										String linea = Usuarios[i] + ";" + Contrase[i];
+										bw.write(linea);
+										if (i < cont-1) {
+											bw.newLine();	
+										}
+									}
+									bw.close();
+									
+									
+								} catch(IOException e) {
+									System.out.println("No se encontro Usuarios.txt");
+								}
+								
+							}
 							
 						} while (opcion != 5);
 						
@@ -221,14 +313,14 @@ public class Main {
 
 
 					sArchU.close();
-				} catch (Exception e) {
-					System.out.println("no existe el archivo Usuarios.txt");
+				} catch (IOException e) {
+					System.out.println("No existe el archivo Usuarios.txt");
 				}
 			}
 			else if (option == 2) {
 				int opcion = 0;
+				System.out.printf("\nBienvenido al menu de analisis!");
 				do {
-					System.out.printf("\nBienvenido al menu de analisis!");
 					System.out.println("\nQue deseas realizar? \n");
 					System.out.println("1) Actividad más realizada");
 					System.out.println("2) Actividad más realizada por cada usuario");
@@ -247,7 +339,49 @@ public class Main {
 						entry = s.nextLine();
 					}
 					
-					if (opcion == 4) {
+					if (opcion == 1) {
+						String[] activunica = new String[500];
+						int[] conteoactividades = new int[500];
+						try {
+							Scanner sArchR = new Scanner(fileR);
+							int cont = 0;
+							while (sArchR.hasNextLine()) {
+								String linea = sArchR.nextLine();
+								String[] partes = linea.split(";");
+								String actividad = partes[3];
+								boolean encontrado = false;
+								
+								for (int i = 0; i < cont; i++) {
+									if (activunica[i].equals(actividad)) {
+										conteoactividades[i]++;
+										encontrado = true;
+										break;
+									}
+								}
+								if (!encontrado && cont < 300) {
+									activunica[cont] = actividad;
+									conteoactividades[cont] = 1;
+									cont++;
+								}
+							}
+							sArchR.close();
+							
+							int max = -1;
+							String maxn = "";
+							
+							for (int i = 0; i < cont; i++) {
+								if (conteoactividades[i] > max) {
+									max = conteoactividades[i];
+									maxn = activunica[i];
+								}
+							}
+							System.out.printf("\nLa actividad que mas se repite es %s, un total de %d\n", maxn, max);
+							
+							
+						}catch (FileNotFoundException e) {
+							System.out.println("No existe Registros.txt");
+						}
+					} else if (opcion == 4) {
 						try {
 							Scanner sArchR = new Scanner(fileR);
 							
