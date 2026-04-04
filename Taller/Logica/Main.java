@@ -172,13 +172,20 @@ public class Main {
 										String ent = s.nextLine();
 										nlinea = Integer.parseInt(ent);
 										
+										if (nlinea > cont) {
+											System.out.println("Error, seleccione solo los numeros presentados");
+											break;
+										} else if (nlinea < 0){
+											System.out.println("Error, seleccione solo los numeros presentados");
+											break;
+										}
 										
 										
 										
 									} catch (Exception e) {
 										System.out.println("Ingrese un numero valido de linea");
 									}
-									if (nlinea > cont || nlinea < 1) {
+									if (nlinea > cont && nlinea < 1) {
 										System.out.println("Error seleccione una linea valida");
 									} else {
 										System.out.print("Indique fecha (DD/MM/AAAA): ");
