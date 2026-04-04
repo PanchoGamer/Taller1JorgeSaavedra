@@ -359,13 +359,13 @@ public class Main {
 								boolean encontrado = false;
 								
 								for (int i = 0; i < cont; i++) {
-									if (activunica[i].equals(actividad)) {
+									if (actividad.equalsIgnoreCase(activunica[i])) {
 										conteoactividades[i]++;
 										encontrado = true;
 										break;
 									}
 								}
-								if (!encontrado && cont < 300) {
+								if (!encontrado && cont < 500) {
 									activunica[cont] = actividad;
 									conteoactividades[cont] = 1;
 									cont++;
@@ -382,7 +382,7 @@ public class Main {
 									maxn = activunica[i];
 								}
 							}
-							System.out.printf("\nLa actividad que mas se repite es %s, un total de %d\n", maxn, max);
+							System.out.printf("\nLa actividad que mas se repite es %s, un total de %d veces\n", maxn, max);
 							
 							
 						}catch (FileNotFoundException e) {
