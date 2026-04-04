@@ -5,3 +5,5 @@ Paquetes
       # Logica
 Contiene el taller completo
 
+Ejecucion:
+Para ejecutar vaya mediante los numeros por las opciones que desee
